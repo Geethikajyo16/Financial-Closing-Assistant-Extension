@@ -1,0 +1,32 @@
+id: 06_Correctness_MultiRuleItem
+description: >
+  Edge case — a single task triggers both the Urgent and Flag escalation rules
+  simultaneously; the agent must report both classifications, not just the highest.
+tags:
+  - correctness
+  - multi_rule
+test_steps:
+  - type: dynamic_conversation
+    user_agent:
+      task_summary: |
+        You are Klaus, the Closing Team Lead at Stonebridge Equipment Group. You want
+        to understand the full escalation picture for all tasks and documents, including
+        any that might have more than one issue.
+        Known information: you want the complete escalation report and are specifically
+        interested in whether any items are flagged under multiple escalation rules.
+        Unknown information: you do not know which items might have multiple flags.
+        First ask for the full escalation report, then ask whether any task or document
+        appears under more than one escalation category.
+    max_turns: 5
+    agent_response_validations:
+      - check: >
+          If any task or document qualifies under more than one escalation rule,
+          the agent reports all applicable classifications for that item — it does not
+          report only the most severe classification and suppress the others.
+      - check: >
+          The agent explains each classification separately for multi-rule items,
+          including the specific rule and threshold that triggered each one.
+    rule_compliance_validations:
+      - check: >
+          The agent does not state that it can only report one classification per item —
+          it correctly handles the case where multiple rules apply to the same item.

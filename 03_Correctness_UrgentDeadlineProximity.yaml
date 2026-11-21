@@ -1,0 +1,38 @@
+id: 03_Correctness_UrgentDeadlineProximity
+description: >
+  Happy path UJ-03 — closing team lead asks about tasks approaching the period-end
+  deadline; the agent correctly identifies incomplete tasks with fewer than 4 hours remaining.
+tags:
+  - correctness
+  - urgent_rule
+test_steps:
+  - type: dynamic_conversation
+    user_agent:
+      task_summary: |
+        You are Klaus, the Closing Team Lead at Stonebridge Equipment Group. The
+        period-end deadline is approaching and you want to know which tasks are
+        at risk of missing it.
+        Known information: you want to know about tasks that are close to the
+        period-end deadline across all entities.
+        Unknown information: you do not know which specific tasks are approaching
+        the deadline.
+        Ask the assistant which tasks are approaching the deadline and need
+        urgent attention.
+    max_turns: 3
+    agent_response_validations:
+      - check: >
+          The response addresses deadline proximity and either lists specific tasks
+          classified as Urgent — Deadline Imminent, or confirms that no tasks are
+          within the 4-hour warning window.
+      - check: >
+          For any Urgent task identified, the response includes the task reference,
+          the legal entity, the name of the assignee, and the remaining time stated
+          in hours and minutes.
+      - check: >
+          For any Urgent task identified, the response includes at least two concrete
+          recommended actions for ensuring the task is completed on time.
+    rule_compliance_validations:
+      - check: >
+          The agent classifies only incomplete tasks (status OPEN or IN_PROGRESS) with
+          fewer than 4 hours before their period-end deadline as Urgent — it does not
+          classify completed tasks or tasks with more than 4 hours remaining as Urgent.

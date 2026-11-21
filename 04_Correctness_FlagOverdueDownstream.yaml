@@ -1,0 +1,38 @@
+id: 04_Correctness_FlagOverdueDownstream
+description: >
+  Happy path UJ-04 — closing team lead asks about overdue tasks blocking downstream
+  dependencies; the agent correctly identifies and flags schedule risks.
+tags:
+  - correctness
+  - flag_rule
+test_steps:
+  - type: dynamic_conversation
+    user_agent:
+      task_summary: |
+        You are Klaus, the Closing Team Lead at Stonebridge Equipment Group. You are
+        worried about tasks that are running late and may be holding up other tasks
+        in the closing process.
+        Known information: you want to know about overdue tasks that are blocking
+        other work in the close process.
+        Unknown information: you do not know which specific tasks are overdue or
+        what downstream work they are blocking.
+        Ask the assistant which tasks are overdue and creating schedule risk for
+        downstream dependencies.
+    max_turns: 3
+    agent_response_validations:
+      - check: >
+          The response addresses overdue tasks with downstream blocking and either
+          lists specific tasks classified as Flag — Schedule Risk, or confirms that
+          no such tasks exist.
+      - check: >
+          For any Flag task identified, the response includes the task reference,
+          the legal entity, how long the task has been overdue, and the references
+          of the downstream tasks that are blocked.
+      - check: >
+          For any Flag task identified, the response includes at least two concrete
+          recommended actions for mitigating the schedule risk.
+    rule_compliance_validations:
+      - check: >
+          The agent classifies only tasks that are both past their scheduled
+          completion time and have downstream dependencies as Flag — it does not
+          flag overdue tasks without downstream dependencies in this category.

@@ -1,0 +1,41 @@
+id: 01_Correctness_FullEscalationReport
+description: >
+  Happy path UJ-01 — finance team lead requests the full escalation report and receives
+  a consolidated, priority-ordered summary covering all three escalation rules.
+tags:
+  - correctness
+  - escalation_report
+test_steps:
+  - type: dynamic_conversation
+    user_agent:
+      task_summary: |
+        You are Klaus, the Closing Team Lead at Stonebridge Equipment Group. It is the
+        last day of the period-end close and you need to quickly identify all critical
+        closing issues across all legal entities.
+        You want to generate the full escalation report to see all current issues.
+        Known information: you are the closing team lead and want all escalation issues
+        across all entities.
+        Unknown information: you do not know which specific documents or tasks are
+        currently flagged.
+        Ask the assistant to generate the full escalation report.
+    max_turns: 3
+    agent_response_validations:
+      - check: >
+          The response contains a structured escalation report with at least one of the
+          three sections: Critical — Immediate Action Required, Urgent — Deadline Imminent,
+          or Flag — Schedule Risk, presented in that priority order.
+      - check: >
+          The report includes a total issue count summarising the number of Critical,
+          Urgent, and Flag items identified.
+      - check: >
+          Each escalation item in the report includes a reference identifier, a legal entity,
+          a reason for escalation, the threshold or condition that triggered it, and at
+          least one recommended action.
+      - check: >
+          The response includes the advisory disclaimer stating that all recommendations
+          are advisory and no changes have been made to any financial system.
+    rule_compliance_validations:
+      - check: >
+          The Critical section, if present, appears before the Urgent section, and the
+          Urgent section appears before the Flag section — the priority order is never
+          reversed.

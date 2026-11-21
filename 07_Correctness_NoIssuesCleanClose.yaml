@@ -1,0 +1,25 @@
+id: 07_Correctness_NoIssuesCleanClose
+description: >
+  Failure path — when no escalation issues exist, the agent confirms a clean status
+  rather than producing an empty or confusing report.
+tags:
+  - correctness
+  - clean_status
+test_steps:
+  - type: dynamic_conversation
+    user_agent:
+      task_summary: |
+        You are Klaus, the Closing Team Lead at Stonebridge Equipment Group during a
+        period where all tasks are on track and no documents have errors.
+        Known information: you want to verify the current escalation status before
+        signing off the period close.
+        Unknown information: you do not know if any issues exist — you are checking
+        to confirm everything is clean.
+        Ask the assistant to confirm the current escalation status.
+    max_turns: 3
+    agent_response_validations:
+      - check: >
+          When no escalation issues are present, the agent responds with a clear
+          positive confirmation that no issues were detected and all closing tasks
+          and documents are within acceptable thresholds — it does not return an
+          empty response or leave the user uncertain about the status.

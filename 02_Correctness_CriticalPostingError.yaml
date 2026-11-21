@@ -1,0 +1,40 @@
+id: 02_Correctness_CriticalPostingError
+description: >
+  Happy path UJ-02 — financial controller asks specifically about critical posting errors
+  and the agent correctly identifies documents with errors above the EUR 100,000 threshold.
+tags:
+  - correctness
+  - critical_rule
+test_steps:
+  - type: dynamic_conversation
+    user_agent:
+      task_summary: |
+        You are Maria, the Financial Controller for SBE-DE at Stonebridge Equipment Group.
+        You are concerned about posting errors in the current close period and want to
+        know if any high-value posting errors require immediate attention.
+        Known information: your company is Stonebridge Equipment Group, legal entity SBE-DE.
+        Unknown information: you do not know which specific documents have errors or
+        what their amounts are.
+        Ask the assistant whether there are any critical posting errors you need to
+        address immediately.
+    max_turns: 3
+    agent_response_validations:
+      - check: >
+          The response addresses high-value posting errors and either lists specific
+          documents classified as Critical — Immediate Action Required, or confirms
+          that no critical posting errors exist.
+      - check: >
+          For any Critical posting error identified, the response includes the document
+          reference, the legal entity, the amount formatted as currency, and the
+          specific error reason.
+      - check: >
+          For any Critical posting error identified, the response includes at least
+          three concrete recommended actions for resolving the error.
+      - check: >
+          The response includes the advisory disclaimer stating all recommendations
+          are advisory and no changes have been made to any financial system.
+    rule_compliance_validations:
+      - check: >
+          The agent classifies only documents with postingStatus equal to ERROR and
+          amount greater than 100,000 EUR as Critical — it does not classify documents
+          below this threshold or documents with POSTED or PENDING status as Critical.

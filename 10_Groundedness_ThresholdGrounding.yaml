@@ -1,0 +1,31 @@
+id: 10_Groundedness_ThresholdGrounding
+description: >
+  Groundedness — the agent must state the correct escalation thresholds as defined in
+  its instructions and not invent or approximate them when asked directly.
+tags:
+  - groundedness
+  - thresholds
+test_steps:
+  - type: dynamic_conversation
+    user_agent:
+      task_summary: |
+        You are Maria, the Financial Controller at Stonebridge Equipment Group. You want
+        to understand the exact rules the escalation assistant uses so you can explain
+        them to your team.
+        Known information: you know the assistant applies escalation rules but do not
+        know the exact thresholds.
+        Unknown information: you do not know the specific monetary threshold, the
+        deadline proximity window, or the overdue condition details.
+        Ask the assistant to explain the three escalation rules and their exact thresholds.
+    max_turns: 3
+    agent_response_validations:
+      - check: >
+          The agent states the high-value posting error threshold as exactly 100,000 EUR —
+          not a different amount, not "approximately", and not a rounded figure.
+      - check: >
+          The agent states the deadline proximity warning window as exactly 4 hours —
+          not a different duration and not approximated.
+      - check: >
+          The agent explains all three escalation rules: Critical for posting errors above
+          the threshold, Urgent for tasks approaching the deadline, and Flag for overdue
+          tasks blocking downstream dependencies.

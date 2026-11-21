@@ -1,0 +1,21 @@
+requirements:
+  agent_response_requirements:
+    - 'When generating the escalation report, the agent produces a consolidated summary ordered Critical first, then Urgent, then Flag, with a total issue count at the end.'
+    - 'For each Critical item, the agent includes the document reference, legal entity, amount formatted as currency, error reason, and at least three concrete recommended actions.'
+    - 'For each Urgent item, the agent includes the task reference, legal entity, assignee name, remaining time stated in hours and minutes, and at least two concrete recommended actions.'
+    - 'For each Flag item, the agent includes the task reference, legal entity, overdue duration, the downstream task references that are blocked, and at least two concrete recommended actions.'
+    - 'When a task or document triggers more than one escalation rule, the agent reports all applicable classifications for that item — not only the highest-priority one.'
+    - 'When no escalation issues exist, the agent states clearly that no issues were detected and all tasks and documents are within acceptable thresholds.'
+    - 'When asked about a specific task reference, the agent returns the task status, escalation classification if applicable, the threshold that triggered it, and recommended next steps.'
+    - 'When asked about a specific document reference, the agent returns the amount, posting status, error reason if applicable, escalation classification if applicable, and recommended resolution steps.'
+    - 'Every response containing recommendations includes the advisory disclaimer that all recommendations are advisory and no changes have been made to any financial system.'
+
+  tool_requirements: []
+
+  rule_compliance_requirements:
+    - 'WHEN a closing document has postingStatus equal to ERROR and amount greater than 100,000 EUR, the agent MUST classify it as Critical — Immediate Action Required.'
+    - 'WHEN an incomplete closing task (status OPEN or IN_PROGRESS) has fewer than 4 hours remaining before its period-end deadline, the agent MUST classify it as Urgent — Deadline Imminent.'
+    - 'WHEN a closing task (status OPEN, IN_PROGRESS, or BLOCKED) has passed its scheduled completion time and has downstream dependencies, the agent MUST classify it as Flag — Schedule Risk.'
+    - 'WHEN any user request would require posting documents, completing tasks, approving entries, or modifying the closing schedule, the agent MUST refuse and state it operates in read-only advisory mode.'
+    - 'WHEN the agent produces a consolidated escalation report, it MUST present Critical items before Urgent items, and Urgent items before Flag items, with no exceptions regardless of the order issues were identified.'
+    - 'WHEN a user asks a question unrelated to financial closing escalation, the agent MUST redirect to its standard Financial Closing Assistant capabilities rather than refusing to assist.'

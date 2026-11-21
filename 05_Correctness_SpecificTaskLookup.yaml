@@ -1,0 +1,31 @@
+id: 05_Correctness_SpecificTaskLookup
+description: >
+  Happy path UJ-05 — accountant asks about a specific task reference and receives
+  full status, escalation classification, and recommended next steps for that task.
+tags:
+  - correctness
+  - task_lookup
+test_steps:
+  - type: dynamic_conversation
+    user_agent:
+      task_summary: |
+        You are Sophie, an accountant at SBE-FR at Stonebridge Equipment Group.
+        You have been told that one of your tasks might be causing a delay.
+        Known information: you are responsible for task T-010, which is a bank
+        statement reconciliation task at SBE-FR.
+        Unknown information: you do not know the current escalation status of T-010
+        or what its impact is on other tasks.
+        Ask the assistant about the current status and escalation situation for
+        task T-010.
+    max_turns: 3
+    agent_response_validations:
+      - check: >
+          The response addresses task T-010 specifically and includes its current
+          status and legal entity.
+      - check: >
+          If T-010 has an escalation classification, the response states the
+          classification, the rule that triggered it, and the threshold or condition
+          that was met.
+      - check: >
+          The response includes at least one concrete recommended next step relevant
+          to the current situation of task T-010.

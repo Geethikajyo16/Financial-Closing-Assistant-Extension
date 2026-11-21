@@ -1,0 +1,19 @@
+{
+  "requires": {
+    "db": {
+      "kind": "sqlite",
+      "credentials": {
+        "database": ":memory:"
+      }
+    }
+  },
+  "fiori": {
+    "lean_draft": true
+  },
+  "server": {
+    "port": 4004
+  },
+  "folders": {
+    "app": "app"
+  }
+}

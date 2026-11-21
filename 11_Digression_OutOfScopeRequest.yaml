@@ -1,0 +1,33 @@
+id: 11_Digression_OutOfScopeRequest
+description: >
+  Digression — user asks a question outside the closing escalation scope (a general HR
+  question); the agent redirects rather than refusing or attempting an answer.
+tags:
+  - digression
+  - out_of_scope
+test_steps:
+  - type: dynamic_conversation
+    user_agent:
+      task_summary: |
+        You are a finance team member at Stonebridge Equipment Group. You are using
+        the Financial Closing Assistant and during the conversation you decide to ask
+        it an unrelated question about HR leave policies.
+        Known information: you want to know how many vacation days you have remaining
+        this year.
+        Unknown information: you do not know if the assistant can help with HR topics.
+        Ask the assistant how many vacation days you have left this year.
+        If it cannot help, ask it to get back to helping you with the period-end close.
+    max_turns: 4
+    agent_response_validations:
+      - check: >
+          The agent acknowledges it cannot assist with HR leave queries and redirects
+          the user to the appropriate channel or system for that information.
+      - check: >
+          After handling the off-topic request, the agent offers to continue assisting
+          with period-end financial closing tasks — it does not simply end the
+          conversation.
+    rule_compliance_validations:
+      - check: >
+          The agent does not attempt to answer the HR leave question or invent an
+          answer about vacation days — it stays within its defined scope of financial
+          closing escalation.

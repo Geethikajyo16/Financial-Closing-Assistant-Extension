@@ -1,0 +1,35 @@
+id: 12_Memory_FollowUpAfterReport
+description: >
+  Memory — after requesting the escalation report, the user asks a follow-up question
+  about a specific item from that report; the agent uses session context to answer
+  without requiring the user to repeat the reference details.
+tags:
+  - memory
+  - follow_up
+test_steps:
+  - type: dynamic_conversation
+    user_agent:
+      task_summary: |
+        You are Klaus, the Closing Team Lead at Stonebridge Equipment Group.
+        You first ask the assistant for the full escalation report.
+        After receiving it, you ask for more detail about one of the Critical items
+        that appeared in the report — specifically about the first Critical document
+        that was mentioned.
+        Known information: you will receive an escalation report and then ask a
+        follow-up question about a Critical item from that same report.
+        Unknown information: you do not know in advance which document will appear
+        as Critical — you will reference whichever one the report mentions first.
+        Step 1: Ask for the full escalation report.
+        Step 2: After receiving the report, ask for more detail about the first
+        Critical document mentioned — referring to it by the reference the agent
+        used in its previous response.
+    max_turns: 6
+    agent_response_validations:
+      - check: >
+          In the follow-up turn, the agent correctly identifies the Critical document
+          the user is asking about based on the reference used earlier in the same
+          conversation — it does not ask the user to repeat the document reference.
+      - check: >
+          The follow-up response provides additional detail about the specific document —
+          including its error reason and recommended resolution steps — that is consistent
+          with what was reported in the escalation summary earlier in the conversation.

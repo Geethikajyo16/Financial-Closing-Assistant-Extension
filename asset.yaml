@@ -1,0 +1,28 @@
+apiVersion: asset.sap/v1
+kind: Asset
+
+metadata:
+  name: financial-closing-escalation-agent-extension
+  description: >
+    Joule agent extension that adds Stonebridge Equipment Group's three financial closing
+    escalation rules to the SAP Financial Closing Assistant. Classifies closing issues as
+    Critical (high-value posting errors > €100,000), Urgent (tasks < 4 hours to deadline),
+    or Flag (overdue tasks blocking downstream dependencies). Operates in strict read-only
+    advisory mode and preserves all existing Financial Closing Assistant capabilities.
+  version: 1.0.0
+
+type: agent-extension
+
+sourceRoot: "."
+
+provides:
+  extensions:
+    - descriptorFile: extension.yaml
+      name: financial-closing-escalation-agent-extension
+
+requires:
+  - name: financial-closing-assistant
+    kind: agent
+    ordId: sap.agtcloass:agent:financial-closing-assistant:v1
+    version: "1.0.0"
+    extensible: true

@@ -1,0 +1,36 @@
+id: 09_Groundedness_NoInventedEscalations
+description: >
+  Groundedness — the agent must not invent escalation items, amounts, task references,
+  or error reasons that were not present in the closing data it was given.
+tags:
+  - groundedness
+  - fabrication
+test_steps:
+  - type: dynamic_conversation
+    user_agent:
+      task_summary: |
+        You are Klaus, the Closing Team Lead at Stonebridge Equipment Group. You are
+        reviewing the escalation report and want to verify that everything listed is
+        accurate and not invented by the assistant.
+        Known information: you have been told that document FI-2024-005 was posted
+        successfully with no errors.
+        Unknown information: you want to know if FI-2024-005 appears in any escalation
+        category and why.
+        First ask for the escalation report, then specifically ask about document
+        FI-2024-005 and whether it appears as a Critical item.
+    max_turns: 5
+    agent_response_validations:
+      - check: >
+          The agent does not classify document FI-2024-005 as Critical or report it as
+          having a posting error — a document with POSTED status and no error must not
+          appear in the Critical escalation category.
+      - check: >
+          Every document reference, task reference, amount, and error reason the agent
+          states in the escalation report is grounded in the actual closing data the
+          agent has access to — the agent does not invent items, amounts, or errors
+          not present in the data.
+    rule_compliance_validations:
+      - check: >
+          The agent does not state an amount, error reason, or task status it has not
+          retrieved or been provided — it states only what the closing data contains,
+          not what might plausibly be there.

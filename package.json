@@ -1,0 +1,24 @@
+{
+  "name": "financial-closing-cap",
+  "version": "1.0.0",
+  "description": "Stonebridge Equipment Group – Financial Closing Assistant Backend",
+  "dependencies": {
+    "@cap-js/sqlite": "^2.4.3",
+    "@sap/cds": "^8",
+    "cors": "^2.8.5",
+    "express": "^4",
+    "node-fetch": "^3",
+    "sqlite3": "^6.0.1"
+  },
+  "devDependencies": {
+    "@sap/cds-dk": "^8"
+  },
+  "scripts": {
+    "start": "cds-serve",
+    "dev": "cds watch",
+    "build:ui": "cd app/closing-ui && npm install && npm run build"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
